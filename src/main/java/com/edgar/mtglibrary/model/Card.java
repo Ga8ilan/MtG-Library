@@ -25,6 +25,64 @@ public class Card {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
   private Long id;
+
+  // Constructor for JPA
+  public Card() {}
+
+  // Constructor for the class
+  public Card(String name, String rarity, String type, List<String> abilities, String manaCost,
+              String text, List<String> colorIdentity, String power, String toughness) {
+
+    this.name = name;
+    this.rarity = rarity;
+    this.type = type;
+    this.abilities = abilities;
+    this.manaCost = manaCost;
+    this.text = text;
+    this.colorIdentity = colorIdentity;
+    this.power = power;
+    this.toughness = toughness;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public String getRarity() {
+    return rarity;
+  }
+
+  public String getType() {
+    return type;
+  }
+
+  public List<String> getAbilities() {
+    return abilities;
+  }
+
+  public String getManaCost() {
+    return manaCost;
+  }
+
+  public String getText() {
+    return text;
+  }
+
+  public List<String> getColorIdentity() {
+    return colorIdentity;
+  }
+
+  public String getPower() {
+    return power;
+  }
+
+  public String getToughness() {
+    return toughness;
+  }
 }
+
+
+
+
 
 
