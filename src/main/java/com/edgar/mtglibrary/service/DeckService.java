@@ -41,7 +41,7 @@ public class DeckService {
       throw new IllegalArgumentException("Deck cannot be null");
     }
 
-    if (isValidColorIdentity(commander, deck.getCards())) {
+    if (commanderIsValidColorIdentity(commander, deck.getCards())) {
       throw new IllegalArgumentException("Deck and commander must have the same color identity");
     }
 
@@ -65,7 +65,7 @@ public class DeckService {
     }
   }
 
-  private boolean isValidColorIdentity(Card commander, List<Card> Cards) {
+  private boolean commanderIsValidColorIdentity(Card commander, List<Card> Cards) {
     for (Card card : Cards) {
       if (!commander.getColorIdentity().equals(card.getColorIdentity())) {
         return false;
