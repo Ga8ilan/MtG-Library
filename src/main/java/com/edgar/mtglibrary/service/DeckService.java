@@ -6,6 +6,9 @@ import com.edgar.mtglibrary.repository.DeckRepository;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class for creating and validating decks.
+ */
 @Service
 public class DeckService {
   private final DeckRepository deckRepository;
@@ -40,7 +43,7 @@ public class DeckService {
 
   /**
    * Validating that the deck is a valid standard deck.
-   * @param deck
+   * @param deck Deck to validate.
    */
   public void ValidateStandardDeck(Deck deck) {
     if (deck == null) {
@@ -81,8 +84,6 @@ public class DeckService {
       // add card to saved
       return true;
     }
-
-    for 
     return false;
   }
 }
