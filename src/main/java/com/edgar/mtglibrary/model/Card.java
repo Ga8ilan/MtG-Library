@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity
 public class Card {
+  private String commanderCard;
   private String name;
   // Legendary, Common, Uncommon, Rare, Mythic - That stuff
   private String rarity;
@@ -30,9 +31,10 @@ public class Card {
   public Card() {}
 
   // Constructor for the class
-  public Card(String name, String rarity, String type, List<String> abilities, String manaCost,
+  public Card(String commanderCard, String name, String rarity, String type, List<String> abilities, String manaCost,
               String text, List<Mana> colorIdentity, String power, String toughness, Long id) {
 
+    this.commanderCard = commanderCard;
     this.name = name;
     this.rarity = rarity;
     this.type = type;
@@ -45,6 +47,10 @@ public class Card {
     this.id = id;
   }
 
+  public String getCommanderCard() {
+    return commanderCard;
+
+  }
   public String getName() {
     return name;
   }

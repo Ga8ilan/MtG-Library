@@ -20,10 +20,10 @@ public class DeckService {
 
   /**
    * Creating a valid commander deck that satisfies all commander deck rules.
-   * @param card 100 uniques cards are required.
+   * @param cards 100 uniques cards are required.
    * @return a valid commander deck.
    */
-  public Deck createCommanderDeck(List<Card> card) {
+  public Deck createCommanderDeck(List<Card> cards) {
     return null;
   }
 
@@ -34,12 +34,25 @@ public class DeckService {
    * 2. Deck must be a Commander or a Standard deck
    * 3. Commander deck must have 100 UNIQUE cards.
    * 4. All rules for the commander card must be met.
-   * @param deck Deck to validate. (Thinking if this should come first before create deck...)
+   * @param deck Deck to validate. (Thinking if this should come first before creating deck...)
    */
-  public void ValidateCommanderDeck(Deck deck) {
+  public void ValidateCommanderDeck(Deck deck, Card commander) {
     if (deck == null) {
       throw new IllegalArgumentException("Deck cannot be null");
     }
+
+    if (isValidColorIdentity(commander, deck.getCards())) {
+      throw new IllegalArgumentException("Deck and commander must have the same color identity");
+    }
+
+    if (!commanderIsValidSize(deck.getCards())) {
+      throw new IllegalArgumentException("Deck must have 100 cards");
+    }
+
+    if (commanderIsDeckUnique(deck.getCards())) {
+      throw new IllegalArgumentException("Deck must have 100 unique cards");
+    }
+
   }
 
   /**
@@ -52,32 +65,23 @@ public class DeckService {
     }
   }
 
-  private boolean isLegendary(Card card) {
-    if (card.getRarity().equals("Legendary")) {
-      return true;
-    }
-    throw new IllegalArgumentException("Not a Legendary card for a commander decks commander");
-  }
-
-  private boolean isValidColorIdentity(Card commander, List<Card> Deck) {
-    for (Card card : Deck) {
-      if (commander.getColorIdentity() != card.getColorIdentity()) {
+  private boolean isValidColorIdentity(Card commander, List<Card> Cards) {
+    for (Card card : Cards) {
+      if (!commander.getColorIdentity().equals(card.getColorIdentity())) {
         return false;
       }
     }
     return true;
   }
 
-  private boolean isValidSize(List<Card> Deck) {
-    return Deck.size() == 50;
+  private boolean commanderIsValidSize(List<Card> Deck) {
+    return Deck.size() == 100;
   }
 
-  private boolean isUnqiue(List<Card> Deck) {
+  private boolean commanderIsDeckUnique(List<Card> Deck) {
     for (Card card : Deck) {
-
       List<Card> saved;
-      saved = new ArrayList<Card>();
-
+      saved = new ArrayList<>();
       card = Deck.get(Deck.indexOf(card) + 1);
       if (Deck.contains(card)) {
         // add card to saved cards.
