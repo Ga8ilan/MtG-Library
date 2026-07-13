@@ -3,6 +3,7 @@ package com.edgar.mtglibrary.service;
 import com.edgar.mtglibrary.model.Card;
 import com.edgar.mtglibrary.model.Deck;
 import com.edgar.mtglibrary.repository.DeckRepository;
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +61,7 @@ public class DeckService {
 
   private boolean isValidColorIdentity(Card commander, List<Card> Deck) {
     for (Card card : Deck) {
-      if (commander.getColorIdentity().containsAll(card.getColorIdentity())) {
+      if (commander.getColorIdentity() != card.getColorIdentity()) {
         return false;
       }
     }
@@ -73,15 +74,16 @@ public class DeckService {
 
   private boolean isUnqiue(List<Card> Deck) {
     for (Card card : Deck) {
-      // need to save the most recent card
-      // check saved card with next indicy.
-      // do this for all cards in the deck,
-      // if not unique, return false.
+
       List<Card> saved;
+      saved = new ArrayList<Card>();
+
       card = Deck.get(Deck.indexOf(card) + 1);
       if (Deck.contains(card)) {
+        // add card to saved cards.
+        saved.add(card);
+        return !saved.contains(card);
       }
-      // add card to saved
       return true;
     }
     return false;
