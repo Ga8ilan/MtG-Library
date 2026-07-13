@@ -18,7 +18,7 @@ public class Card {
   List<String> abilities;
   private String manaCost;
   private String text;
-  List<String> colorIdentity;
+  List<Mana> colorIdentity;
   private String power;
   private String toughness;
   @Id
@@ -31,7 +31,7 @@ public class Card {
 
   // Constructor for the class
   public Card(String name, String rarity, String type, List<String> abilities, String manaCost,
-              String text, List<String> colorIdentity, String power, String toughness) {
+              String text, List<Mana> colorIdentity, String power, String toughness, Long id) {
 
     this.name = name;
     this.rarity = rarity;
@@ -42,6 +42,7 @@ public class Card {
     this.colorIdentity = colorIdentity;
     this.power = power;
     this.toughness = toughness;
+    this.id = id;
   }
 
   public String getName() {
@@ -68,7 +69,7 @@ public class Card {
     return text;
   }
 
-  public List<String> getColorIdentity() {
+  public List<Mana> getColorIdentity() {
     return colorIdentity;
   }
 

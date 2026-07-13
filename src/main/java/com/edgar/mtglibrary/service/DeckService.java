@@ -54,4 +54,35 @@ public class DeckService {
     }
     throw new IllegalArgumentException("Not a Legendary card for a commander decks commander");
   }
+
+  private boolean isValidColorIdentity(Card commander, List<Card> Deck) {
+    for (Card card : Deck) {
+      if (commander.getColorIdentity().containsAll(card.getColorIdentity())) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean isValidSize(List<Card> Deck) {
+    return Deck.size() == 50;
+  }
+
+  private boolean isUnqiue(List<Card> Deck) {
+    for (Card card : Deck) {
+      // need to save the most recent card
+      // check saved card with next indicy.
+      // do this for all cards in the deck,
+      // if not unique, return false.
+      List<Card> saved;
+      card = Deck.get(Deck.indexOf(card) + 1);
+      if (Deck.contains(card)) {
+      }
+      // add card to saved
+      return true;
+    }
+
+    for 
+    return false;
+  }
 }
