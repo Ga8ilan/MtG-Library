@@ -36,7 +36,7 @@ public class DeckService {
    * 4. All rules for the commander card must be met.
    * @param deck Deck to validate. (Thinking if this should come first before creating deck...)
    */
-  public void ValidateCommanderDeck(Deck deck, Card commander) {
+  public void validateCommanderDeck(Deck deck, Card commander) {
     if (deck == null) {
       throw new IllegalArgumentException("Deck cannot be null");
     }
