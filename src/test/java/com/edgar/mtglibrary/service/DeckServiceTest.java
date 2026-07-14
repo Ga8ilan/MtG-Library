@@ -3,62 +3,66 @@ package com.edgar.mtglibrary.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.edgar.mtglibrary.model.Card;
-import com.edgar.mtglibrary.model.CommanderDeck;
 import com.edgar.mtglibrary.model.Mana;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class DeckServiceTest {
 
-  private CommanderDeck commanderDeck;
-  private CommanderDeck invalidCommanderDeck;
-  private List<Card> cardsNintyNine; // A STANDARD DECK WOULD HAVE A LIST OF 99 CARDS.
-  private List<Card> cards;
+  private List<Card> cards; // A STANDARD DECK WOULD HAVE A LIST OF 99 CARDS.
+  private List<Card> invalidCards;
+  private List<Card> nullCards;
   private Card invalidCommanderCard;
   private Card commanderCard;
   private Card randomCard;
+  private Card nullCard;
+  // private CommanderDeck nullDeck;
 
   @BeforeEach
   void setUp() {
-    cardsNintyNine = new ArrayList<>();
+    cards = new ArrayList<>();
     for (int i = 0; i < 99; i++) {
-      cardsNintyNine.add(new Card(false, "commander" + i, "name", "rare",
+      cards.add(new Card(false, "commander" + i, "name", "rare",
           "type", List.of("ability"), List.of(Mana.RED, Mana.BLACK, Mana.BLACK),
-          "text", List.of(Mana.RED, Mana.BLACK),
+          "text", Set.of(Mana.RED, Mana.BLACK),
           "power", "toughness", 12L + i));
     }
 
-    cards = new ArrayList<>();
+    invalidCards = new ArrayList<>();
     for (int i = 0; i < 100; i++) {
-      cards.add(new Card(false, "commander" + i, "name", "rare",
+      invalidCards.add(new Card(false, "commander" + i, "name", "rare",
           "type", List.of("ability"), List.of(Mana.RED, Mana.BLACK, Mana.BLACK),
-          "text", List.of(Mana.RED, Mana.BLACK),
+          "text", Set.of(Mana.RED, Mana.BLACK),
           "power", "toughness", 14L + i));
+    }
+
+    nullCards = new ArrayList<>();
+    for (int i = 0; i < 99; i++) {
+      nullCards.add(nullCard);
     }
 
     invalidCommanderCard = new Card(true, "oops?", "name", "Legendary",
         "type", List.of("ability"), List.of(Mana.RED, Mana.BLACK, Mana.BLACK),
-        "text", List.of(Mana.RED, Mana.BLUE),
+        "text", Set.of(Mana.RED, Mana.BLUE),
         "power", "toughness", null);
 
     commanderCard = new Card(true,"oops?", "name", "Legendary",
         "type", List.of("ability"), List.of(Mana.RED, Mana.BLACK, Mana.BLACK),
-        "text", List.of(Mana.RED, Mana.BLACK),
+        "text", Set.of(Mana.RED, Mana.BLACK),
         "power", "toughness", null);
 
     randomCard = new Card(false,"oops?", "name", "Legendary",
         "type", List.of("ability"), List.of(Mana.RED, Mana.BLACK, Mana.BLACK),
-        "text", List.of(Mana.RED, Mana.BLACK),
+        "text", Set.of(Mana.RED, Mana.BLACK),
         "power", "toughness", null);
 
-    invalidCommanderDeck = new CommanderDeck("My Deck", null, List.of(Mana.RED, Mana.BLACK),
-        commanderCard, cards, null);
+    nullCard = new Card(null, null, null, null, null,
+        null, null, null, null, null, null, null);
 
-    commanderDeck = new CommanderDeck("My Deck", null, List.of(Mana.RED, Mana.BLACK),
-        commanderCard, cardsNintyNine, null);
-
+    // nullDeck = new CommanderDeck(null, null, null, null, null, null);
   }
 
   @Test
@@ -67,11 +71,19 @@ class DeckServiceTest {
   }
 
   @Test
+  void testValidateCommanderDeckNull() {
+    assertThrows(NullPointerException.class, () -> {
+      DeckService invalidNull = new DeckService(null);
+      invalidNull.validateCommanderCards(nullCards, commanderCard);
+    });
+
+  }
+  @Test
   void testValidateCommanderDeckUnique() {
     assertThrows(IllegalArgumentException.class, () -> {
-      cardsNintyNine.add(cardsNintyNine.getFirst());
+      cards.add(cards.getFirst());
       DeckService invalidUnique = new DeckService(null);
-      invalidUnique.validateCommanderDeck(commanderDeck, commanderCard);
+      invalidUnique.validateCommanderCards(cards, commanderCard);
     });
   }
 
@@ -79,16 +91,16 @@ class DeckServiceTest {
   void testValidateCommanderDeckCommanderColorIdentity() {
     assertThrows(IllegalArgumentException.class, () -> {
       DeckService invalidColorIdentity = new DeckService(null);
-      invalidColorIdentity.validateCommanderDeck(commanderDeck, invalidCommanderCard);
+      invalidColorIdentity.validateCommanderCards(cards, invalidCommanderCard);
     });
   }
 
   @Test
-  void testIsValidSizeCommanderDeck() {
+  void testAreCardsValidSize() {
     cards.add(randomCard);
     assertThrows(IllegalArgumentException.class, () -> {
       DeckService invalidSize = new DeckService(null);
-      invalidSize.validateCommanderDeck(invalidCommanderDeck, commanderCard);
+      invalidSize.validateCommanderCards(invalidCards, commanderCard);
     });
   }
 }

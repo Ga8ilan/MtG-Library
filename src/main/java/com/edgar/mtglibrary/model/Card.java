@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Card {
@@ -24,7 +25,7 @@ public class Card {
   List<Mana> manaCost;
   private String text;
   @ElementCollection
-  List<Mana> manaType;
+  Set<Mana> manaType;
   private String power;
   private String toughness;
   @Id
@@ -37,7 +38,7 @@ public class Card {
 
   // Constructor for the class
   public Card(Boolean isCommander, String card, String name, String rarity, String type, List<String> abilities, List<Mana> manaCost,
-              String text, List<Mana> manaType, String power, String toughness, Long id) {
+              String text, Set<Mana> manaType, String power, String toughness, Long id) {
 
     this.isCommander = isCommander;
     this.card = card;
@@ -86,7 +87,7 @@ public class Card {
   }
 
   @Enumerated(EnumType.STRING)
-  public List<Mana> getManaType() {
+  public Set<Mana> getManaType() {
     return manaType;
   }
 

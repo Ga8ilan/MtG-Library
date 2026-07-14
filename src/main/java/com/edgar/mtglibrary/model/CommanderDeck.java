@@ -11,13 +11,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class CommanderDeck {
   private String name;
   private String setName; // optional
   @ElementCollection
-  private List<Mana> manaType;
+  private Set<Mana> manaType;
   @ManyToOne
   private Card commanderCard;
   @ManyToMany
@@ -29,7 +30,7 @@ public class CommanderDeck {
 
   public CommanderDeck() {}
 
-  public CommanderDeck(String name, String setName, List<Mana> manaType, Card commanderCard, List<Card> cards, Long id) {
+  public CommanderDeck(String name, String setName, Set<Mana> manaType, Card commanderCard, List<Card> cards, Long id) {
     this.name = name;
     this.setName = setName;
     this.manaType = manaType;
@@ -47,7 +48,7 @@ public class CommanderDeck {
   }
 
   @Enumerated(EnumType.STRING)
-  public List<Mana> getManaType() {
+  public Set<Mana> getManaType() {
     return manaType;
   }
 

@@ -20,7 +20,7 @@ mtg-library/
 │   │   │   └── DeckController.java
 │   │   ├── model/
 │   │   │   ├── Card.java
-│   │   │   ├── Deck.java
+│   │   │   ├── CommanderDeck.java
 │   │   │   └── CollectionEntry.java
 │   │   ├── repository/
 │   │   │   ├── CardRepository.java
@@ -39,6 +39,6 @@ mtg-library/
 └── java/com/yourname/mtglibrary/
 ├── service/
 │   ├── CardServiceTest.java
-│   └── DeckServiceTest.java
+│   └── DeckServiceTest.java // need more strucutred file.
 └── controller/
 └── CardControllerTest.java
