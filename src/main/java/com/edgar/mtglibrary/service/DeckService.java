@@ -1,7 +1,7 @@
 package com.edgar.mtglibrary.service;
 
 import com.edgar.mtglibrary.model.Card;
-import com.edgar.mtglibrary.model.Deck;
+import com.edgar.mtglibrary.model.CommanderDeck;
 import com.edgar.mtglibrary.repository.DeckRepository;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +20,10 @@ public class DeckService {
 
   /**
    * Creating a valid commander deck that satisfies all commander deck rules.
-   * @param cards 100 uniques cards are required.
+   * @param cards 99 uniques cards are required EXCLUDING the commander card.
    * @return a valid commander deck.
    */
-  public Deck createCommanderDeck(List<Card> cards) {
+  public CommanderDeck createCommanderDeck(List<Card> cards) {
     return null;
   }
 
@@ -32,21 +32,21 @@ public class DeckService {
    * Some checks are:
    * 1. Deck cannot be null
    * 2. Deck must be a Commander or a Standard deck
-   * 3. Commander deck must have 100 UNIQUE cards.
+   * 3. Commander deck must have 100 UNIQUE cards. (99 spell cards + 1 commander card)
    * 4. All rules for the commander card must be met.
-   * @param deck Deck to validate. (Thinking if this should come first before creating deck...)
+   * @param deck Deck to validate.
    */
-  public void validateCommanderDeck(Deck deck, Card commander) {
+  public void validateCommanderDeck(CommanderDeck deck, Card commander) {
     if (deck == null) {
       throw new IllegalArgumentException("Deck cannot be null");
     }
 
-    if (commanderIsValidColorIdentity(commander, deck.getCards())) {
-      throw new IllegalArgumentException("Deck and commander must have the same color identity");
+    if (!commanderValidManaType(commander, deck.getCards(), deck)) {
+      throw new IllegalArgumentException("cards and commander must have the same color identity");
     }
 
-    if (!commanderIsValidSize(deck.getCards())) {
-      throw new IllegalArgumentException("Deck must have 100 cards");
+    if (!commanderIsValidSize(deck)) {
+      throw new IllegalArgumentException("Deck must have 100 cards including the commander card");
     }
 
     if (commanderIsDeckUnique(deck.getCards())) {
@@ -59,31 +59,32 @@ public class DeckService {
    * Validating that the deck is a valid standard deck.
    * @param deck Deck to validate.
    */
-  public void ValidateStandardDeck(Deck deck) {
+  public void ValidateStandardDeck(CommanderDeck deck) {
     if (deck == null) {
       throw new IllegalArgumentException("Deck cannot be null");
     }
   }
 
-  private boolean commanderIsValidColorIdentity(Card commander, List<Card> Cards) {
+  private boolean commanderValidManaType(Card commander, List<Card> Cards, CommanderDeck deck) {
     for (Card card : Cards) {
-      if (!commander.getColorIdentity().equals(card.getColorIdentity())) {
+      if (!commander.getManaType().equals(card.getManaType()) &&
+      (!commander.getManaType().equals(deck.getManaType()))) {
         return false;
       }
     }
     return true;
   }
 
-  private boolean commanderIsValidSize(List<Card> Deck) {
-    return Deck.size() == 100;
+  private boolean commanderIsValidSize(CommanderDeck deck) {
+    return deck.getCards().size() + 1 == 100;
   }
 
-  private boolean commanderIsDeckUnique(List<Card> Deck) {
-    for (Card card : Deck) {
+  private boolean commanderIsDeckUnique(List<Card> cards) {
+    for (Card card : cards) {
       List<Card> saved;
       saved = new ArrayList<>();
-      card = Deck.get(Deck.indexOf(card) + 1);
-      if (Deck.contains(card)) {
+      card = cards.get(cards.indexOf(card) + 1);
+      if (cards.contains(card)) {
         // add card to saved cards.
         saved.add(card);
         return !saved.contains(card);

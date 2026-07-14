@@ -1,7 +1,10 @@
 package com.edgar.mtglibrary.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,9 +21,10 @@ public class Card {
   private String type;
   // Flying, Trample, Death touch, LifeLink, Double strike
   List<String> abilities;
-  private String manaCost;
+  List<Mana> manaCost;
   private String text;
-  List<Mana> colorIdentity;
+  @ElementCollection
+  List<Mana> manaType;
   private String power;
   private String toughness;
   @Id
@@ -32,8 +36,8 @@ public class Card {
   public Card() {}
 
   // Constructor for the class
-  public Card(Boolean isCommander, String card, String name, String rarity, String type, List<String> abilities, String manaCost,
-              String text, List<Mana> colorIdentity, String power, String toughness, Long id) {
+  public Card(Boolean isCommander, String card, String name, String rarity, String type, List<String> abilities, List<Mana> manaCost,
+              String text, List<Mana> manaType, String power, String toughness, Long id) {
 
     this.isCommander = isCommander;
     this.card = card;
@@ -43,7 +47,7 @@ public class Card {
     this.abilities = abilities;
     this.manaCost = manaCost;
     this.text = text;
-    this.colorIdentity = colorIdentity;
+    this.manaType = manaType;
     this.power = power;
     this.toughness = toughness;
     this.id = id;
@@ -73,7 +77,7 @@ public class Card {
     return abilities;
   }
 
-  public String getManaCost() {
+  public List<Mana> getManaCost() {
     return manaCost;
   }
 
@@ -81,8 +85,9 @@ public class Card {
     return text;
   }
 
-  public List<Mana> getColorIdentity() {
-    return colorIdentity;
+  @Enumerated(EnumType.STRING)
+  public List<Mana> getManaType() {
+    return manaType;
   }
 
   public String getPower() {

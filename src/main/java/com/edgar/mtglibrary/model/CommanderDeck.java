@@ -1,35 +1,41 @@
 package com.edgar.mtglibrary.model;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import java.util.List;
 
 @Entity
-public class Deck {
+public class CommanderDeck {
   private String name;
-  private String setName;
+  private String setName; // optional
+  @ElementCollection
+  private List<Mana> manaType;
+  @ManyToOne
+  private Card commanderCard;
   @ManyToMany
   private List<Card> cards;
-  private String deckType;
-  private List<Mana> ColorIdentity;
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(nullable = false)
   private Long id;
 
-  public Deck() {}
+  public CommanderDeck() {}
 
-  public Deck(String name, String setName, List<Card> cards, String deckType, List<Mana> Mana, Long id) {
+  public CommanderDeck(String name, String setName, List<Mana> manaType, Card commanderCard, List<Card> cards, Long id) {
     this.name = name;
     this.setName = setName;
+    this.manaType = manaType;
+    this.commanderCard = commanderCard;
     this.cards = cards;
-    this.deckType = deckType;
     this.id = id;
-    this.ColorIdentity = Mana;
   }
 
   public String getName() {
@@ -40,15 +46,16 @@ public class Deck {
     return setName;
   }
 
+  @Enumerated(EnumType.STRING)
+  public List<Mana> getManaType() {
+    return manaType;
+  }
+
+  public Card getCommanderCard() {
+    return commanderCard;
+  }
+
   public List<Card> getCards() {
     return cards;
-  }
-
-  public String getDeckType() {
-    return deckType;
-  }
-
-  public List<Mana> getColorIdentity() {
-    return ColorIdentity;
   }
 }
