@@ -72,15 +72,11 @@ public class DeckService {
   }
 
   private boolean commanderAreCardsUnique(List<Card> cards) {
-    Set<Card> savedCards = new HashSet<Card>();
+    Set<Card> savedCards = new HashSet<>();
     for (Card card : cards) {
-      card = cards.get(cards.indexOf(card) + 1);
-      if (cards.contains(card)) {
-        // add card to saved cards.
-        savedCards.add(card);
-        return !savedCards.contains(card);
+      if (!(savedCards.add(card))) {
+        return false;
       }
-      return false;
     }
     return true;
   }

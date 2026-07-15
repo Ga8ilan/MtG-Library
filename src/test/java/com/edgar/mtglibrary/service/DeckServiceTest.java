@@ -14,6 +14,7 @@ class DeckServiceTest {
 
   private List<Card> cards; // A STANDARD DECK WOULD HAVE A LIST OF 99 CARDS.
   private List<Card> invalidCards;
+  private List<Card> invalidCardsOneThousand;
   private List<Card> nullCards;
   private Card invalidCommanderCard;
   private Card commanderCard;
@@ -34,6 +35,14 @@ class DeckServiceTest {
     invalidCards = new ArrayList<>();
     for (int i = 0; i < 100; i++) {
       invalidCards.add(new Card(false, "commander" + i, "name", "rare",
+          "type", List.of("ability"), List.of(Mana.RED, Mana.BLACK, Mana.BLACK),
+          "text", Set.of(Mana.RED, Mana.BLACK),
+          "power", "toughness", 14L + i));
+    }
+
+    invalidCardsOneThousand = new ArrayList<>();
+    for (int i = 0; i < 100; i++) {
+      invalidCardsOneThousand.add(new Card(false, "commander" + i, "name", "rare",
           "type", List.of("ability"), List.of(Mana.RED, Mana.BLACK, Mana.BLACK),
           "text", Set.of(Mana.RED, Mana.BLACK),
           "power", "toughness", 14L + i));
@@ -76,12 +85,28 @@ class DeckServiceTest {
       DeckService invalidNull = new DeckService(null);
       invalidNull.validateCommanderCards(nullCards, commanderCard);
     });
-
   }
+
+  @Test
+  void testValidateCommanderDeckNotNull() {
+    assertDoesNotThrow(() -> {
+      DeckService invalidNull = new DeckService(null);
+      invalidNull.validateCommanderCards(cards, commanderCard);
+    });
+  }
+
   @Test
   void testValidateCommanderDeckUnique() {
     assertThrows(IllegalArgumentException.class, () -> {
       cards.add(cards.getFirst());
+      DeckService invalidUnique = new DeckService(null);
+      invalidUnique.validateCommanderCards(cards, commanderCard);
+    });
+  }
+
+  @Test
+  void testValidateCommanderDeckNotUnique() {
+    assertDoesNotThrow(() -> {
       DeckService invalidUnique = new DeckService(null);
       invalidUnique.validateCommanderCards(cards, commanderCard);
     });
@@ -96,11 +121,36 @@ class DeckServiceTest {
   }
 
   @Test
-  void testAreCardsValidSize() {
+  void testAreCardsValidSizePlus() {
     cards.add(randomCard);
     assertThrows(IllegalArgumentException.class, () -> {
       DeckService invalidSize = new DeckService(null);
-      invalidSize.validateCommanderCards(invalidCards, commanderCard);
+      invalidSize.validateCommanderCards(cards, commanderCard);
+    });
+  }
+
+  @Test
+  void testAreCardsValidSizeMinus() {
+    cards.remove(cards.getFirst());
+    assertThrows(IllegalArgumentException.class, () -> {
+      DeckService invalidSize = new DeckService(null);
+      invalidSize.validateCommanderCards(cards, commanderCard);
+    });
+  }
+
+  @Test
+  void testAreCardsValidSizeCheck() {
+    assertDoesNotThrow(() -> {
+      DeckService invalidSize = new DeckService(null);
+      invalidSize.validateCommanderCards(cards, commanderCard);
+    });
+  }
+
+  @Test
+  void testAreCardsinValidSizeCheckOneThousand() {
+    assertThrows(IllegalArgumentException.class, () -> {
+      DeckService invalidSize = new DeckService(null);
+      invalidSize.validateCommanderCards(invalidCardsOneThousand, commanderCard);
     });
   }
 }
